@@ -2,6 +2,8 @@ package com.google.gwt.sample.stockwatcher.client;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -32,6 +34,8 @@ public class StockWatcher implements EntryPoint {
   private Button addStockButton = new Button("Add");
   private Label lastUpdatedLabel = new Label();
   private ArrayList<String> stocks= new ArrayList<>();
+  
+  Logger logger = Logger.getLogger("NameOfYourLogger");
 
   /**
    * Entry point method.
@@ -43,11 +47,18 @@ public class StockWatcher implements EntryPoint {
 	  stocksFlexTable.setText(0, 1, "Price");
 	  stocksFlexTable.setText(0, 2, "Change");
 	  stocksFlexTable.setText(0, 3, "Remove");
-	  stocksFlexTable.addStyleName("stocksFlexTable");//add class
+	  //stocksFlexTable.addStyleName("stocksFlexTable");//add class
+	  // Add styles to elements in the stock list table.
+	  stocksFlexTable.getRowFormatter().addStyleName(0, "watchListHeader");
+	  stocksFlexTable.addStyleName("watchList");
+	  stocksFlexTable.getCellFormatter().addStyleName(0, 1, "watchListNumericColumn");
+	  stocksFlexTable.getCellFormatter().addStyleName(0, 2, "watchListNumericColumn");
+	  stocksFlexTable.getCellFormatter().addStyleName(0, 3, "watchListRemoveColumn");
 	  
 	  // Assemble Add Stock panel.
 	  addPanel.add(newSymbolTextBox);
 	  addPanel.add(addStockButton);
+	  addPanel.addStyleName("addPanel");
 	  
 	// Assemble Main panel.
 	  mainPanel.add(stocksFlexTable);
@@ -111,9 +122,13 @@ public class StockWatcher implements EntryPoint {
 	  stocks.add(symbol);
 	  int row = stocks.size();
 	  stocksFlexTable.setText(row, 0, symbol);
+	  stocksFlexTable.getCellFormatter().addStyleName(row, 1, "watchListNumericColumn");
+	  stocksFlexTable.getCellFormatter().addStyleName(row, 2, "watchListNumericColumn");
+	  stocksFlexTable.getCellFormatter().addStyleName(row, 3, "watchListRemoveColumn");
 	  
 	  //Add a button to remove this stock from the table.
 	  Button removeStockButton = new Button("x");
+	  removeStockButton.addStyleDependentName("remove");
 	  removeStockButton.addClickHandler(new ClickHandler() {		
 		@Override
 		public void onClick(ClickEvent event) {			
